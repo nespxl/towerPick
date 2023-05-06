@@ -1,0 +1,43 @@
+.dropdown-calendar {
+    width: 400px;
+    margin: 0 auto;
+    user-select: none;
+    position: relative;
+}
+
+.dropdown-calendar .dropdown-btn-calendar {
+    padding: 15px 20px;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.dropdown-calendar .dropdown-btn-calendar:hover {
+    background-color: rgba(255, 255, 255, .8);
+    transform: scale(1.1);
+}
+
+.dropdown-calendar .dropdown-content-calendar {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
+    color: #666;
+    width: 95%;
+}
+
+.dropdown-calendar .dropdown-content-calendar .dropdown-item-calendar {
+    padding: 10px;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.dropdown-calendar .dropdown-content-calendar .dropdown-item-calendar:hover {
+    background-color: #f4f4f4;
+}

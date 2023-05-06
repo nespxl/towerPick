@@ -1,0 +1,95 @@
+.form__message {
+    width: 100%;
+}
+
+.form__block {
+    margin-bottom: 50px;
+}
+
+.form__label {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.form__message {
+    min-height: 150px;
+    padding: 10px 12px;
+    margin-bottom: 30px;
+    resize: vertical;
+    border: 3px solid #eee;
+    font-size: 20px;
+    transition: all .2s ease;
+    outline: none;
+}
+
+.form__message:hover {
+    background-color: rgba(255, 255, 255, .8);
+    border: 3px solid rgba(0, 68, 204, .5);
+}
+
+.form__message:focus {
+    background-color: rgba(255, 255, 255, .8);
+    border: 3px solid rgb(0, 68, 204);
+}
+
+.form__submit,
+.form__reset,
+.form__date-btn {
+    padding: 20px 32px;
+    color: white;
+    font-size: 24px;
+    border: none;
+    transition: all .2s ease;
+    cursor: pointer;
+}
+
+.form__submit,
+.form__date-btn {
+    background: rgb(0, 68, 204);
+    margin-right: 20px;
+}
+.form__submit:hover,
+.form__submit:focus,
+.form__date-btn:hover,
+.form__date-btn:focus {
+    background: rgba(0, 68, 204, .7);
+}
+
+.form__reset {
+    background: rgb(204, 34, 34);
+}
+.form__reset:hover,
+.form__reset:focus {
+    background: rgba(204, 34, 34, .8);
+}
+
+.form__error {
+    color: rgb(204, 34, 34);
+}
+
+.noActiveSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, .5);
+    z-index: 100;
+}
+
+.form__date {
+    position: relative;
+}
+
+.form__date-title {
+    font-size: 22px;
+}
+
+.form__date-window-visible {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form__date-window-unvisible {
+    display: none;
+}

@@ -1,0 +1,107 @@
+.calendar-shadow {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, .3);
+	z-index: 102;
+}
+
+.calendar {
+	position: fixed;
+	left: 50%;
+	right: 0;
+	top: 50%;
+	bottom: 0;
+	transform: translate(-50%, -50%);
+	z-index: 1000;
+}
+
+.header {
+	min-width: 100%;
+	display: flex;
+}
+
+.calendar-btn {
+	background: rgba(255, 255, 255, .8);
+	cursor: pointer;
+	width: 80px;
+	border: none;
+}
+
+.calendar-btn:hover {
+	background-color: rgba(255, 255, 255, .8);
+    transform: scale(1.1);
+    transition: all .2s;
+}
+
+.table {
+	background: rgba(244, 244, 244, .6);
+	border-radius: 26px;
+    user-select: none;
+	position: absolute;
+	left: 80px;
+	right: 0;
+	top: 70px;
+}
+
+.titleItem {
+	padding: 20px;
+	font-size: 36px;
+	line-height: 100%;
+}
+
+.bodyItem,
+.bodyItem-prev {
+	padding: 20px;
+	font-size: 26px;
+	line-height: 100%;
+	transition: transform .3s ease, color .3s ease;
+	border-radius: 26px;
+}
+
+.bodyItem {
+	cursor: pointer;
+}
+
+.bodyItem-prev {
+	position: relative;
+}
+
+.bodyItem-prev::before,
+.bodyItem-prev::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	width: 10px;
+	height: 100%;
+	background: #cc2222;
+}
+
+.bodyItem-prev::after {
+	left: 40px;
+	transform: rotate(45deg);
+}
+.bodyItem-prev::before {
+	right: 40px;
+	transform: rotate(-45deg);
+}
+
+.bodyItem:hover {
+	transform: scale(1.1);
+	background: rgba(0, 0, 0, .3);
+}
+
+.bodyItemDis {
+	padding: 20px;
+	font-size: 26px;
+	line-height: 100%;
+	border-radius: 26px;
+	background: #666;
+}
+
+.leftModal {
+	display: flex;
+	justify-content: flex-start;
+}
