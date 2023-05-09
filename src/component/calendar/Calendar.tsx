@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../hooks/customHookQuery";
 import { ICalendar } from "../../interface/app.interface";
 import { sliceValidationReset } from "../../store/sliceValidationReset";
 
-export default function Calendar({ activeCalendar, setActiveCalendar, setGetDate }: ICalendar) {
+export default function Calendar({ activeCalendar, setActiveCalendar, setGetDate, setDateFlag, getDate }: ICalendar) {
   const [dateRedux, setDateRedux] = useState(new Date())
   const refCalendar = useRef(null)
   const refDay = useRef(null)
@@ -91,15 +91,21 @@ export default function Calendar({ activeCalendar, setActiveCalendar, setGetDate
 
   const monthData = calendar.getMonthData(dateRedux.getFullYear(), dateRedux.getMonth());
 
-  function handleClickOut(e: any) {
+  function handleClickOut(e: any): void {
     const withinBoundaries = e.composedPath().includes(refCalendar.current);
 
     if(activeCalendar) {
       if (withinBoundaries) {
         setActiveCalendar(false)
+        if(!getDate) {
+          setDateFlag(true)
+        } else {
+          setDateFlag(false)
+        }
       }
     } else {
         setActiveCalendar(true)
+        setDateFlag(false)
     }
   }
 
@@ -140,6 +146,7 @@ export default function Calendar({ activeCalendar, setActiveCalendar, setGetDate
                           clickItem(e)
                           setActiveCalendar(false)
                           setGetDate(date.getTime())
+                          setDateFlag(false)
                           dispatch(sliceValidationReset.actions.validationDate(date.getTime()))
                         }
                       }

@@ -19,7 +19,8 @@
 }
 
 .header {
-	min-width: 100%;
+	width: 700px;
+	margin-bottom: 30px;
 	display: flex;
 }
 
@@ -37,13 +38,10 @@
 }
 
 .table {
+	width: 700px;
 	background: rgba(244, 244, 244, .6);
 	border-radius: 26px;
     user-select: none;
-	position: absolute;
-	left: 80px;
-	right: 0;
-	top: 70px;
 }
 
 .titleItem {
@@ -80,11 +78,11 @@
 }
 
 .bodyItem-prev::after {
-	left: 40px;
+	left: 45px;
 	transform: rotate(45deg);
 }
 .bodyItem-prev::before {
-	right: 40px;
+	right: 45px;
 	transform: rotate(-45deg);
 }
 

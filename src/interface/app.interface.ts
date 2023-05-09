@@ -22,4 +22,6 @@ export interface ICalendar {
     activeCalendar: boolean
     setActiveCalendar: Dispatch<SetStateAction<boolean>>
     setGetDate: Dispatch<SetStateAction<any>>
+    setDateFlag: Dispatch<SetStateAction<boolean>>
+    getDate: string
 }

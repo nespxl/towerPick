@@ -1,52 +1,54 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import '../style/form.css'
 import Label from './ui/Label'
 import { useAppDispatch, useAppSelector } from '../hooks/customHookQuery'
-import { defaultText, titleEnd, titleFloor, titleMeeting, titleStart, titleTower } from '../const/const'
+import { defaultText, titleDate, titleEnd, titleFloor, titleMeeting, titleStart, titleTower } from '../const/const'
 import { sliceValidationReset } from '../store/sliceValidationReset'
 import Calendar from './calendar/Calendar'
 
 export default function Form() {
     const { validation, validationFloor, validationMeeting, validationStart, validationDate } = useAppSelector(state => state.sliceValidationReset)
-    const [resetBtn, setResetBtn] = useState(false)
+    const [resetBtn, setResetBtn] = useState<boolean>(false)
     const resRef = useRef<HTMLTextAreaElement>(null)
     const dispatch = useAppDispatch()
+    const defaultArrayTime: Array<string> = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00']
 
     const [activeCalendar, setActiveCalendar] = useState(false)
-    const [getDate, setGetDate] = useState('')
+    const [getDate, setGetDate] = useState<string>('')
+    const [dateFlag, setDateFlag] = useState<boolean>(false)
 
-    const [tower, setTower] = useState(defaultText)
-    const [towerFlag, setTowerFlag] = useState(false)
-    const [towerActive, setTowerActive] = useState(true)
-    const towerOptions = ['Башня А', 'Башня Б']
+    const [tower, setTower] = useState<string>(defaultText)
+    const [towerFlag, setTowerFlag] = useState<boolean>(false)
+    const [towerActive, setTowerActive] = useState<boolean>(true)
+    const towerOptions: Array<string> = ['Башня А', 'Башня Б']
 
-    const [floor, setFloor] = useState(defaultText)
-    const [floorActive, setFloorActive] = useState(true)
-    const [floorFlag, setFloorFlag] = useState(false)
-    const floorOptions = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27']
+    const [floor, setFloor] = useState<string>(defaultText)
+    const [floorActive, setFloorActive] = useState<boolean>(true)
+    const [floorFlag, setFloorFlag] = useState<boolean>(false)
+    const floorOptions: Array<string> = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27']
 
-    const [meetingRoom, setMeetingRoom] = useState(defaultText)
-    const [meetingRoomActive, setMeetingRoomActive] = useState(true)
-    const [meetingRoomFlag, setMeetingRoomFlag] = useState(false)
-    const meetingOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    const [meetingRoom, setMeetingRoom] = useState<string>(defaultText)
+    const [meetingRoomActive, setMeetingRoomActive] = useState<boolean>(true)
+    const [meetingRoomFlag, setMeetingRoomFlag] = useState<boolean>(false)
+    const meetingOptions: Array<string> = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
-    const [timeStart, setTimeStart] = useState(defaultText)
-    const [timeStartActive, setTimeStartActive] = useState(true)
-    const [timeStartFlag, setTimeStartFlag] = useState(false)
-    const timeStartOptions = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30']
+    const [timeStart, setTimeStart] = useState<string>(defaultText)
+    const [timeStartActive, setTimeStartActive] = useState<boolean>(true)
+    const [timeStartFlag, setTimeStartFlag] = useState<boolean>(false)
+    const timeStartOptions: Array<string> = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30']
 
-    const [timeEnd, setTimeEnd] = useState(defaultText)
-    const [timeEndActive, setTimeEndActive] = useState(true)
-    const [timeEndFlag, setTimeEndFlag] = useState(false)
-    const timeEndOptions = ['8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00']
+    const [timeEnd, setTimeEnd] = useState<string>(defaultText)
+    const [timeEndActive, setTimeEndActive] = useState<boolean>(true)
+    const [timeEndFlag, setTimeEndFlag] = useState<boolean>(false)
+    const [timeEndOptions, setTimeEndOptions] = useState<Array<string>>(defaultArrayTime)
 
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState<string>('')
 
-    function handleMessage(e: any) {
+    function handleMessage(e: React.ChangeEvent<HTMLTextAreaElement>): void {
         setMessage(e.target.value)
     }
 
-    function handleReset(e: any) {
+    function handleReset(e: React.MouseEvent): void {
         e.preventDefault()
         setResetBtn(!resetBtn)
         if (resRef.current) {
@@ -54,7 +56,7 @@ export default function Form() {
         }
     }
 
-    function submit(e: any) {
+    function submit(e: React.MouseEvent): void | boolean {
         e.preventDefault()
         if (tower !== defaultText && floor !== defaultText && meetingRoom !== defaultText && timeStart !== defaultText && timeEnd !== defaultText) {
             const data = {
@@ -69,21 +71,23 @@ export default function Form() {
             console.log(JSON.stringify(data))
         } else {
             console.log('Ошибка!')
-            if (tower === defaultText) {
-                setTowerFlag(true)
+            if (!getDate) {
+                return setDateFlag(true)
+            } else if (tower === defaultText) {
+                return setTowerFlag(true)
             } else if (floor === defaultText) {
-                setFloorFlag(true)
+                return setFloorFlag(true)
             } else if (meetingRoom === defaultText) {
-                setMeetingRoomFlag(true)
+                return setMeetingRoomFlag(true)
             } else if (timeStart === defaultText) {
-                setTimeStartFlag(true)
+                return setTimeStartFlag(true)
             } else if (timeEnd === defaultText) {
-                setTimeEndFlag(true)
+                return setTimeEndFlag(true)
             }
         }
     }
 
-    function handleDate(e: any) {
+    function handleDate(e: React.MouseEvent): void {
         e.preventDefault()
         setActiveCalendar(!activeCalendar)
     }
@@ -100,6 +104,7 @@ export default function Form() {
         setMeetingRoom(defaultText)
         setTimeStart(defaultText)
         setTimeEnd(defaultText)
+        setTimeEndFlag(false)
         setMessage('')
         // Сбрасываем массив
         dispatch(sliceValidationReset.actions.resetDate())
@@ -194,29 +199,51 @@ export default function Form() {
         }
     }, [meetingRoom, validationMeeting])
 
+    // Приводим массив Окончания Времени к дефолтному при изменении настройки Начала Времени
+    useMemo(() => {
+        setTimeEndOptions(defaultArrayTime)
+    }, [timeStart])
+
     useEffect(() => {
         if (timeStart !== defaultText) {
+            const index = timeStartOptions.indexOf(timeStart)
+            const validationTimeEndOptions = timeEndOptions.slice(index + 1)
+
             setTimeEndActive(false)
             if (validationStart[validationStart.length - 1] !== validationStart[validationStart.length - 2]) {
                 setTimeEnd(defaultText)
+                setTimeEndOptions(validationTimeEndOptions)
             }
         } else {
             setTimeEnd(defaultText)
         }
     }, [timeStart, validationStart])
 
+    useEffect(() => {
+        if(timeEnd === defaultText) {
+            
+        }
+    }, [timeEnd])
+
     const day = new Date(getDate).getDate()
     const month = new Date(getDate).getMonth()
     const year = new Date(getDate).getFullYear()
+
+    const fullDateClick = `${day.toString()} - ${month.toString()} - ${year.toString()}`
 
     return (
         <form className='form'>
             <div className='form__block'>
                 <div className='form__date'>
-                    <p className='form__date-title'>Выбрать дату</p>
-                    <div className={getDate ? 'form__date-window-visible' : 'form__date-window-unvisible'}>{day.toString()} - {month.toString()} - {year.toString()}</div>
-                    <button className='form__date-btn' onClick={(e) => handleDate(e)}>Выбрать дату</button>
-                    {activeCalendar && <Calendar activeCalendar={activeCalendar} setActiveCalendar={setActiveCalendar} setGetDate={setGetDate} />}
+                    <p className='form__date-title'>{titleDate}</p>
+                    {dateFlag &&
+                        <div className='form__error'>
+                            Поле не может быть пустым
+                        </div>
+                    }
+                    <div className={getDate ? 'form__date-window-visible' : 'form__date-window-unvisible'}>{fullDateClick}</div>
+                    <button className='form__date-btn' onClick={(e) => handleDate(e)}>{titleDate}</button>
+                    {activeCalendar && <Calendar activeCalendar={activeCalendar} setActiveCalendar={setActiveCalendar} setGetDate={setGetDate} getDate={getDate} setDateFlag={setDateFlag} />}
                 </div>
                 <Label title={titleTower} error={towerFlag} selected={tower} setSelected={setTower} options={towerOptions} setFlag={setTowerFlag} >
                     <div className={towerActive ? 'noActiveSelect' : ''}></div>

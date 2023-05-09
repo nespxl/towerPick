@@ -1,7 +1,3 @@
-.form__message {
-    width: 100%;
-}
-
 .form__block {
     margin-bottom: 50px;
 }
@@ -12,6 +8,7 @@
 }
 
 .form__message {
+    width: 692px;
     min-height: 150px;
     padding: 10px 12px;
     margin-bottom: 30px;
