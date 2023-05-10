@@ -6,12 +6,12 @@ import { Provider } from 'react-redux';
 import { reducerToolkit } from './store/index';
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <Provider store={reducerToolkit()}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <Provider store={reducerToolkit()}>
+            <App />
+        </Provider>
+    </React.StrictMode>
 );

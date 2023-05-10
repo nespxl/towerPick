@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 export default function Dropdown({ selected, setSelected, options, changeMonth }: any) {
 
-	const [isActive, setIsActive] = useState(false)
+	const [isActive, setIsActive] = useState<boolean>(false)
 
 	return (
 		<div className='dropdown-calendar'>

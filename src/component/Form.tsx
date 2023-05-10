@@ -4,7 +4,7 @@ import Label from './ui/Label'
 import { useAppDispatch, useAppSelector } from '../hooks/customHookQuery'
 import { defaultText, titleDate, titleEnd, titleFloor, titleMeeting, titleStart, titleTower } from '../const/const'
 import { sliceValidationReset } from '../store/sliceValidationReset'
-import Calendar from './calendar/Calendar'
+import LabelCalendar from './ui/LabelCalendar'
 
 export default function Form() {
     const { validation, validationFloor, validationMeeting, validationStart, validationDate } = useAppSelector(state => state.sliceValidationReset)
@@ -48,6 +48,7 @@ export default function Form() {
         setMessage(e.target.value)
     }
 
+    // меняем flag отправки, по нему будет отрабатывтаь useEffect
     function handleReset(e: React.MouseEvent): void {
         e.preventDefault()
         setResetBtn(!resetBtn)
@@ -56,8 +57,10 @@ export default function Form() {
         }
     }
 
+    // при отправке формф
     function submit(e: React.MouseEvent): void | boolean {
         e.preventDefault()
+        // если обязательные поля все заполнены(все, кроме textarea)
         if (tower !== defaultText && floor !== defaultText && meetingRoom !== defaultText && timeStart !== defaultText && timeEnd !== defaultText) {
             const data = {
                 getDate: new Date(getDate),
@@ -70,6 +73,7 @@ export default function Form() {
             }
             console.log(JSON.stringify(data))
         } else {
+            // если нашел незаполненное поле
             console.log('Ошибка!')
             if (!getDate) {
                 return setDateFlag(true)
@@ -87,11 +91,7 @@ export default function Form() {
         }
     }
 
-    function handleDate(e: React.MouseEvent): void {
-        e.preventDefault()
-        setActiveCalendar(!activeCalendar)
-    }
-
+    // при клике на 'Сбросить' обнуляем форму(приводим значения к дефолтным + блокируем поля)
     useEffect(() => {
         setTowerActive(true)
         setFloorActive(true)
@@ -113,27 +113,51 @@ export default function Form() {
         dispatch(sliceValidationReset.actions.resetMeeting())
         dispatch(sliceValidationReset.actions.resetStart())
         dispatch(sliceValidationReset.actions.resetEnd())
+        // Сбрасываем ошибки
+        setDateFlag(false)
+        setTowerFlag(false)
+        setFloorFlag(false)
+        setMeetingRoomFlag(false)
+        setTimeStartFlag(false)
+        setTimeEndFlag(false)
     }, [resetBtn])
 
+    // следующие useEffcet'ы отрабатывают при изменении состояния, каждый useEffect смотрит за своим единственным полем, к которому они привязаны, если поле изменило состояние из дефолтного
+    // в пользовательское, то открывается следующие поле для заполнения, если меняется поле при условии непоследнего действующего значения по списку, то все последюущие поля(кроме следующего)
+    // сбросятся к дефолтным и заблокируются
+    // такое решение можно обяъснить, при выборе комнаты изменение в данных не последовательно, может привести к ошибке
+    // за полем Date
     useEffect(() => {
         if (getDate) {
             setTowerActive(false)
+            // если не кликнули на то же значение, что было и до него
             if (validationDate[validationDate.length - 1] !== validationDate[validationDate.length - 2]) {
+                // блокируем поля
                 setFloorActive(true)
                 setMeetingRoomActive(true)
                 setTimeStartActive(true)
                 setTimeEndActive(true)
+                // приводим к дефолтному тексту
                 setTower(defaultText)
                 setFloor(defaultText)
                 setMeetingRoom(defaultText)
                 setTimeStart(defaultText)
                 setTimeEnd(defaultText)
+                // сбрасываем ошибки
+                setTowerFlag(false)
+                setFloorFlag(false)
+                setMeetingRoomFlag(false)
+                setTimeStartFlag(false)
+                setTimeEndFlag(false)
             }
         } else {
+            // если кликнули на то же значение, что было и до него
+            // блокируем поля
             setFloorActive(true)
             setMeetingRoomActive(true)
             setTimeStartActive(true)
             setTimeEndActive(true)
+            // приводим к дефолтному тексту
             setTower(defaultText)
             setFloor(defaultText)
             setMeetingRoom(defaultText)
@@ -142,6 +166,7 @@ export default function Form() {
         }
     }, [getDate, validationDate])
 
+    // за полем Выбора Башни
     useEffect(() => {
         if (tower !== defaultText) {
             setFloorActive(false)
@@ -153,6 +178,10 @@ export default function Form() {
                 setMeetingRoom(defaultText)
                 setTimeStart(defaultText)
                 setTimeEnd(defaultText)
+                setFloorFlag(false)
+                setMeetingRoomFlag(false)
+                setTimeStartFlag(false)
+                setTimeEndFlag(false)
             }
         } else {
             setMeetingRoomActive(true)
@@ -165,6 +194,7 @@ export default function Form() {
         }
     }, [tower, validation])
 
+    // за полем Выбора Этажа
     useEffect(() => {
         if (floor !== defaultText) {
             setMeetingRoomActive(false)
@@ -174,6 +204,9 @@ export default function Form() {
                 setMeetingRoom(defaultText)
                 setTimeStart(defaultText)
                 setTimeEnd(defaultText)
+                setMeetingRoomFlag(false)
+                setTimeStartFlag(false)
+                setTimeEndFlag(false)
             }
         } else {
             setTimeStartActive(true)
@@ -184,6 +217,7 @@ export default function Form() {
         }
     }, [floor, validationFloor])
 
+    // за полем Выбора Переговорной комнаты
     useEffect(() => {
         if (meetingRoom !== defaultText) {
             setTimeStartActive(false)
@@ -191,6 +225,8 @@ export default function Form() {
                 setTimeEndActive(true)
                 setTimeStart(defaultText)
                 setTimeEnd(defaultText)
+                setTimeStartFlag(false)
+                setTimeEndFlag(false)
             }
         } else {
             setTimeEndActive(true)
@@ -204,8 +240,10 @@ export default function Form() {
         setTimeEndOptions(defaultArrayTime)
     }, [timeStart])
 
+    // за полем Выбора начала врмени
     useEffect(() => {
         if (timeStart !== defaultText) {
+            // валидируем поле Выбора Конца Времени(массив будет обрезаться в зависимости от выбранного зхзанчения в поле Выбора Начала Времени)
             const index = timeStartOptions.indexOf(timeStart)
             const validationTimeEndOptions = timeEndOptions.slice(index + 1)
 
@@ -219,32 +257,10 @@ export default function Form() {
         }
     }, [timeStart, validationStart])
 
-    useEffect(() => {
-        if(timeEnd === defaultText) {
-            
-        }
-    }, [timeEnd])
-
-    const day = new Date(getDate).getDate()
-    const month = new Date(getDate).getMonth()
-    const year = new Date(getDate).getFullYear()
-
-    const fullDateClick = `${day.toString()} - ${month.toString()} - ${year.toString()}`
-
     return (
         <form className='form'>
             <div className='form__block'>
-                <div className='form__date'>
-                    <p className='form__date-title'>{titleDate}</p>
-                    {dateFlag &&
-                        <div className='form__error'>
-                            Поле не может быть пустым
-                        </div>
-                    }
-                    <div className={getDate ? 'form__date-window-visible' : 'form__date-window-unvisible'}>{fullDateClick}</div>
-                    <button className='form__date-btn' onClick={(e) => handleDate(e)}>{titleDate}</button>
-                    {activeCalendar && <Calendar activeCalendar={activeCalendar} setActiveCalendar={setActiveCalendar} setGetDate={setGetDate} getDate={getDate} setDateFlag={setDateFlag} />}
-                </div>
+                <LabelCalendar titleDate={titleDate} dateFlag={dateFlag} activeCalendar={activeCalendar} setActiveCalendar={setActiveCalendar} setGetDate={setGetDate} getDate={getDate} setDateFlag={setDateFlag} />
                 <Label title={titleTower} error={towerFlag} selected={tower} setSelected={setTower} options={towerOptions} setFlag={setTowerFlag} >
                     <div className={towerActive ? 'noActiveSelect' : ''}></div>
                 </Label>

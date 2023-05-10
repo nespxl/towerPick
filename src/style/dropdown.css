@@ -3,6 +3,7 @@
     margin: 0 auto;
     user-select: none;
     position: relative;
+    z-index: 100000;
 }
 
 .dropdown-calendar .dropdown-btn-calendar {
@@ -30,6 +31,8 @@
     box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
     color: #666;
     width: 95%;
+    max-height: 200px;
+    overflow-y: scroll;
 }
 
 .dropdown-calendar .dropdown-content-calendar .dropdown-item-calendar {

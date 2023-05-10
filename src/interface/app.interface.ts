@@ -25,3 +25,13 @@ export interface ICalendar {
     setDateFlag: Dispatch<SetStateAction<boolean>>
     getDate: string
 }
+
+export interface ILabelCalendar {
+    titleDate: string
+    dateFlag: boolean
+    activeCalendar: boolean
+    setActiveCalendar: Dispatch<SetStateAction<boolean>>
+    setGetDate: Dispatch<SetStateAction<string>>
+    getDate: string
+    setDateFlag: Dispatch<SetStateAction<boolean>>
+}

@@ -1,11 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import sliceError from "./sliceError";
 import sliceValidationTime from "./sliceVlidationTime";
 import sliceValidationReset from "./sliceValidationReset";
 import sliceCalendar from "./sliceValidationReset";
 
 export const rootReducer = combineReducers({
-    sliceError,
     sliceValidationTime,
     sliceValidationReset,
     sliceCalendar
